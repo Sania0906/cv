@@ -1,0 +1,25 @@
+from google.colab import files
+uploaded=files.upload()
+import cv2
+import matplotlib.pyplot as plt
+
+# Read the image
+img = cv2.imread('/content/tree.png')
+
+# Convert to grayscale
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+# Display images
+plt.figure(figsize=(10,4))
+
+plt.subplot(1,2,1)
+plt.title("Original Image")
+plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+plt.axis('off')
+
+plt.subplot(1,2,2)
+plt.title("Grayscale Image")
+plt.imshow(gray, cmap='gray')
+plt.axis('off')
+
+plt.show()
