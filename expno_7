@@ -1,0 +1,45 @@
+import cv2
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Read input image
+img = cv2.imread("dora.jpg")   # use your image name
+img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+# Get image size
+h, w = img_rgb.shape[:2]
+
+# Select 3 points from original image
+pts1 = np.float32([
+    [50, 50],
+    [200, 50],
+    [50, 200]
+])
+
+# Select 3 points in transformed image
+pts2 = np.float32([
+    [10, 100],
+    [200, 50],
+    [100, 250]
+])
+
+# Get affine transformation matrix
+M = cv2.getAffineTransform(pts1, pts2)
+
+# Apply affine transformation
+affine_img = cv2.warpAffine(img_rgb, M, (w, h))
+
+# Display images
+plt.figure(figsize=(10,4))
+
+plt.subplot(1,2,1)
+plt.title("Original Image")
+plt.imshow(img_rgb)
+plt.axis('off')
+
+plt.subplot(1,2,2)
+plt.title("Affine Transformed Image")
+plt.imshow(affine_img)
+plt.axis('off')
+
+plt.show()
