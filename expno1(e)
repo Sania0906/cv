@@ -1,0 +1,33 @@
+import cv2
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Read the image (BGR)
+img = cv2.imread('/content/Screenshot 2026-02-08 104018.png')
+
+# Convert BGR to RGB for color display
+img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+# Convert to grayscale for erosion
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+# Create kernel
+kernel = np.ones((5,5), np.uint8)
+
+# Apply erosion
+eroded = cv2.erode(gray, kernel, iterations=1)
+
+# Display images
+plt.figure(figsize=(10,4))
+
+plt.subplot(1,2,1)
+plt.title("Original Colour Image")
+plt.imshow(img_rgb)
+plt.axis('off')
+
+plt.subplot(1,2,2)
+plt.title("Eroded Image")
+plt.imshow(eroded, cmap='gray')
+plt.axis('off')
+
+plt.show()
