@@ -1,0 +1,47 @@
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Read input image
+img = cv2.imread("homography.jpg")   # use your image name
+img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+# Get image size
+h, w = img_rgb.shape[:2]
+
+# Select 4 points from original image
+pts1 = np.float32([
+    [50, 50],
+    [w-50, 50],
+    [50, h-50],
+    [w-50, h-50]
+])
+
+# Select 4 corresponding points in output image (perspective change)
+pts2 = np.float32([
+    [100, 100],
+    [w-150, 50],
+    [50, h-100],
+    [w-100, h-150]
+])
+
+# Compute homography matrix
+H, status = cv2.findHomography(pts1, pts2)
+
+# Apply homography transformation
+homography_img = cv2.warpPerspective(img_rgb, H, (w, h))
+
+# Display images
+plt.figure(figsize=(10,4))
+
+plt.subplot(1,2,1)
+plt.title("Original Image")
+plt.imshow(img_rgb)
+plt.axis('off')
+
+plt.subplot(1,2,2)
+plt.title("Homography Transformed Image")
+plt.imshow(homography_img)
+plt.axis('off')
+
+plt.show()
