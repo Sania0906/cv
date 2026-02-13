@@ -1,0 +1,41 @@
+import cv2
+import matplotlib.pyplot as plt
+
+# Read input image
+img = cv2.imread("grape.jpg")   # use your image name
+img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+# Get image center
+h, w = img_rgb.shape[:2]
+center = (w // 2, h // 2)
+
+# Rotation matrices
+# Clockwise rotation (negative angle)
+rotate_clockwise = cv2.getRotationMatrix2D(center, -45, 1.0)
+
+# Counter-clockwise rotation (positive angle)
+rotate_counter = cv2.getRotationMatrix2D(center, 45, 1.0)
+
+# Apply rotation
+clockwise_img = cv2.warpAffine(img_rgb, rotate_clockwise, (w, h))
+counter_img = cv2.warpAffine(img_rgb, rotate_counter, (w, h))
+
+# Display images
+plt.figure(figsize=(12,4))
+
+plt.subplot(1,3,1)
+plt.title("Original Image")
+plt.imshow(img_rgb)
+plt.axis('off')
+
+plt.subplot(1,3,2)
+plt.title("Clockwise Rotation")
+plt.imshow(clockwise_img)
+plt.axis('off')
+
+plt.subplot(1,3,3)
+plt.title("Counter Clockwise Rotation")
+plt.imshow(counter_img)
+plt.axis('off')
+
+plt.show()
