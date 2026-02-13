@@ -1,0 +1,30 @@
+import cv2
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Read the image (color)
+img = cv2.imread('/content/Screenshot 2026-02-09 135607.png')
+
+# Convert BGR to RGB for display
+img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+# Create kernel
+kernel = np.ones((5,5), np.uint8)
+
+# Apply dilation directly on color image
+dilated_color = cv2.dilate(img_rgb, kernel, iterations=1)
+
+# Display
+plt.figure(figsize=(10,4))
+
+plt.subplot(1,2,1)
+plt.title("Original Colour Image")
+plt.imshow(img_rgb)
+plt.axis('off')
+
+plt.subplot(1,2,2)
+plt.title("Dilated Colour Image")
+plt.imshow(dilated_color)
+plt.axis('off')
+
+plt.show()
