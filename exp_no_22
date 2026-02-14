@@ -1,0 +1,34 @@
+import cv2
+import matplotlib.pyplot as plt
+from google.colab import files
+
+# Upload image
+uploaded = files.upload()
+image_path = list(uploaded.keys())[0]
+
+# Read image
+img = cv2.imread(image_path)
+img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+# Add watermark text
+watermarked = img_rgb.copy()
+cv2.putText(watermarked,
+            "Sania Herbert",       # Watermark text
+            (50, 50),              # Position
+            cv2.FONT_HERSHEY_SIMPLEX,
+            1,
+            (255, 0, 0),           # Color (Red in RGB)
+            2)
+
+# Display
+plt.subplot(1,2,1)
+plt.imshow(img_rgb)
+plt.title("Original")
+plt.axis("off")
+
+plt.subplot(1,2,2)
+plt.imshow(watermarked)
+plt.title("Watermarked Image")
+plt.axis("off")
+
+plt.show()
