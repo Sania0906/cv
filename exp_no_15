@@ -1,0 +1,50 @@
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Read uploaded image
+img = cv2.imread('building.jpg')  # Replace with your file name
+
+# Convert to RGB for correct display
+img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+# Convert to grayscale
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+# Sobel X (vertical edges)
+sobel_x = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=3)
+sobel_x = np.uint8(np.absolute(sobel_x))
+
+# Sobel Y (horizontal edges)
+sobel_y = cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=3)
+sobel_y = np.uint8(np.absolute(sobel_y))
+
+# Combined Sobel (XY) magnitude
+sobel_xy = cv2.magnitude(cv2.Sobel(gray, cv2.CV_64F,1,0),
+                         cv2.Sobel(gray, cv2.CV_64F,0,1))
+sobel_xy = np.uint8(sobel_xy)
+
+# Display all results
+plt.figure(figsize=(15,7))
+
+plt.subplot(1,4,1)
+plt.imshow(img_rgb)
+plt.title("Original Image")
+plt.axis("off")
+
+plt.subplot(1,4,2)
+plt.imshow(sobel_x, cmap='gray')
+plt.title("Sobel X")
+plt.axis("off")
+
+plt.subplot(1,4,3)
+plt.imshow(sobel_y, cmap='gray')
+plt.title("Sobel Y")
+plt.axis("off")
+
+plt.subplot(1,4,4)
+plt.imshow(sobel_xy, cmap='gray')
+plt.title("Sobel XY (Combined)")
+plt.axis("off")
+
+plt.show()
