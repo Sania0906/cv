@@ -1,0 +1,54 @@
+# Import libraries
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Read image
+img = cv2.imread(list(uploaded.keys())[0])
+img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+# Display original image
+plt.imshow(img)
+plt.title("Original Image")
+plt.axis('off')
+plt.show()
+
+# ---- Define 4 source points (CHANGE THESE) ----
+# Order: top-left, top-right, bottom-right, bottom-left
+src = np.float32([
+    [120, 150],
+    [420, 150],
+    [450, 400],
+    [90, 400]
+])
+
+# ---- Define output size ----
+width, height = 300, 400
+
+dst = np.float32([
+    [0, 0],
+    [width, 0],
+    [width, height],
+    [0, height]
+])
+
+# Compute perspective transform matrix
+matrix = cv2.getPerspectiveTransform(src, dst)
+
+# Apply transformation
+warped = cv2.warpPerspective(img, matrix, (width, height))
+
+# Show results
+plt.figure(figsize=(8,4))
+
+plt.subplot(1,2,1)
+plt.imshow(img)
+plt.title("Original")
+plt.axis('off')
+
+plt.subplot(1,2,2)
+plt.imshow(warped)
+plt.title("Perspective Transformed")
+plt.axis('off')
+
+plt.show()
