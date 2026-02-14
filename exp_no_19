@@ -1,0 +1,44 @@
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+from google.colab import files
+
+# Upload image
+uploaded = files.upload()
+image_path = list(uploaded.keys())[0]
+
+# Read image in grayscale
+img = cv2.imread(image_path, 0)
+
+# Step 1: Blur the image
+blur = cv2.GaussianBlur(img, (5,5), 0)
+
+# Step 2: Create mask
+mask = img - blur
+
+# Step 3: Add mask to original image
+k = 1.5   # Sharpening factor
+sharpened = img + k * mask
+
+# Convert to uint8
+sharpened = np.clip(sharpened, 0, 255).astype(np.uint8)
+
+# Display images
+plt.figure(figsize=(12,4))
+
+plt.subplot(1,3,1)
+plt.imshow(img, cmap='gray')
+plt.title("Original Image")
+plt.axis("off")
+
+plt.subplot(1,3,2)
+plt.imshow(mask, cmap='gray')
+plt.title("Unsharp Mask")
+plt.axis("off")
+
+plt.subplot(1,3,3)
+plt.imshow(sharpened, cmap='gray')
+plt.title("Sharpened Image")
+plt.axis("off")
+
+plt.show()
