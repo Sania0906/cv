@@ -1,0 +1,64 @@
+import cv2
+import matplotlib.pyplot as plt
+import numpy as np # Import numpy
+
+img = cv2.imread('tv.jpg')
+img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+plt.imshow(img)
+plt.title("Original Image")
+plt.axis("off")
+
+def compute_homography(src, dst):
+    A = []
+
+    for i in range(4):
+        x, y = src[i][0], src[i][1]
+        u, v = dst[i][0], dst[i][1]
+
+        A.append([-x, -y, -1, 0, 0, 0, u*x, u*y, u])
+        A.append([0, 0, 0, -x, -y, -1, v*x, v*y, v])
+
+    A = np.array(A)
+
+    # Solve Ah = 0 using SVD
+    U, S, Vt = np.linalg.svd(A)
+    H = Vt[-1].reshape(3,3)
+
+    return H / H[2,2]
+
+# Define source and destination points for homography
+# These are example points; you might need to adjust them based on the actual TV screen corners in 'tv.jpg'
+# Assuming a typical TV screen shape within the image
+# For example: top-left, top-right, bottom-right, bottom-left
+src_pts = np.float32([
+    [160, 110], # Top-left of the TV screen in tv.jpg (estimate)
+    [310, 110], # Top-right
+    [310, 200], # Bottom-right
+    [160, 200]  # Bottom-left
+])
+
+# Define destination points (a simple rectangle for the warped image)
+dst_pts = np.float32([
+    [0, 0],
+    [300, 0],
+    [300, 200],
+    [0, 200]
+])
+
+H = compute_homography(src_pts, dst_pts)
+print("Homography Matrix:\n", H)
+height, width = 200, 300 # Set output dimensions based on dst_pts or desired output
+warped = cv2.warpPerspective(img, H, (width, height))
+
+plt.figure(figsize=(10,5))
+plt.subplot(1,2,1)
+plt.imshow(img)
+plt.title("Original Image")
+plt.axis("off")
+
+plt.subplot(1,2,2)
+plt.imshow(warped)
+plt.title("Transformed Image (DLT)")
+plt.axis("off")
+plt.show()
