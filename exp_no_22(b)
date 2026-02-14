@@ -1,0 +1,36 @@
+import cv2
+import matplotlib.pyplot as plt
+from google.colab import files
+
+# Upload image
+uploaded = files.upload()
+image_path = list(uploaded.keys())[0]
+
+# Read image
+img = cv2.imread(image_path)
+img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+# Crop region (adjust values if needed)
+crop = img_rgb[50:200, 50:200]
+
+# Paste cropped region to new location
+img_copy = img_rgb.copy()
+img_copy[250:400, 250:400] = crop
+
+# Display
+plt.subplot(1,3,1)
+plt.imshow(img_rgb)
+plt.title("Original")
+plt.axis("off")
+
+plt.subplot(1,3,2)
+plt.imshow(crop)
+plt.title("Cropped")
+plt.axis("off")
+
+plt.subplot(1,3,3)
+plt.imshow(img_copy)
+plt.title("Pasted Image")
+plt.axis("off")
+
+plt.show()
